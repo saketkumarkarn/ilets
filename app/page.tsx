@@ -314,6 +314,8 @@ function HeroSection() {
   const [wordIndex, setWordIndex] = useState(0);
   const [visible, setVisible] = useState(true);
   const [qaName, setQaName] = useState('');
+  const [qaEmail, setQaEmail] = useState('');
+  const [qaPhone, setQaPhone] = useState('');
   const [qaService, setQaService] = useState('');
   const [qaStatus, setQaStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
 
@@ -336,7 +338,7 @@ function HeroSection() {
       const res = await fetch('/api/enquiry', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: qaName, email: 'quick@assessment.form', phone: 'N/A', service: qaService, message: 'Quick assessment request from homepage' }),
+        body: JSON.stringify({ name: qaName, email: qaEmail, phone: qaPhone, service: qaService, message: 'Quick assessment request from homepage' }),
       });
       const data = await res.json();
       setQaStatus(data.success ? 'success' : 'error');
@@ -485,6 +487,22 @@ function HeroSection() {
                     placeholder="Your Full Name"
                     value={qaName}
                     onChange={(e) => setQaName(e.target.value)}
+                    required
+                    className="w-full rounded-xl bg-white/20 border border-white/30 text-white placeholder-white/60 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-white/50"
+                  />
+                  <input
+                    type="email"
+                    placeholder="Email Address"
+                    value={qaEmail}
+                    onChange={(e) => setQaEmail(e.target.value)}
+                    required
+                    className="w-full rounded-xl bg-white/20 border border-white/30 text-white placeholder-white/60 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-white/50"
+                  />
+                  <input
+                    type="tel"
+                    placeholder="Mobile Number"
+                    value={qaPhone}
+                    onChange={(e) => setQaPhone(e.target.value)}
                     required
                     className="w-full rounded-xl bg-white/20 border border-white/30 text-white placeholder-white/60 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-white/50"
                   />
