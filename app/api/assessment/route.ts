@@ -4,11 +4,13 @@ import { prisma } from '@/lib/db'
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
-    const { type, name, email, phone, country, education, experience, courseLevel, destination, loanAmount, ...rest } = body
+    // Accept both `name` and `fullName` (different forms use different field names)
+    const { type, name, fullName, email, phone, country, education, experience, courseLevel, destination, loanAmount, ...rest } = body
+    const resolvedName = name || fullName
 
-    if (!type || !name || !email || !phone) {
+    if (!type || !resolvedName || !email || !phone) {
       return NextResponse.json(
-        { success: false, message: 'Type, name, email and phone are required.' },
+        { success: false, message: 'Name, email and phone are required.' },
         { status: 400 }
       )
     }
@@ -16,7 +18,7 @@ export async function POST(request: NextRequest) {
     await prisma.assessment.create({
       data: {
         type,
-        name,
+        name: resolvedName,
         email,
         phone,
         country: country ?? null,
@@ -33,9 +35,10 @@ export async function POST(request: NextRequest) {
       { success: true, message: "Assessment submitted. We'll contact you within 24 hours." },
       { status: 201 }
     )
-  } catch {
+  } catch (err) {
+    console.error('[assessment API error]', err)
     return NextResponse.json(
-      { success: false, message: 'Failed to submit assessment.' },
+      { success: false, message: 'Server error. Please try again shortly.' },
       { status: 500 }
     )
   }

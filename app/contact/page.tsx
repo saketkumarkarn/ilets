@@ -44,6 +44,7 @@ export default function ContactPage() {
       }
     } catch {
       setStatus('error')
+      console.error('Contact form submission failed')
     }
   }
 

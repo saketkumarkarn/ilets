@@ -21,9 +21,10 @@ export async function POST(request: NextRequest) {
       { success: true, message: 'Enquiry submitted successfully.' },
       { status: 201 }
     )
-  } catch {
+  } catch (err) {
+    console.error('[enquiry API error]', err)
     return NextResponse.json(
-      { success: false, message: 'Failed to submit enquiry.' },
+      { success: false, message: 'Server error. Please try again shortly.' },
       { status: 500 }
     )
   }
