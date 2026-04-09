@@ -1,0 +1,79 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model Enquiry {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String
+  phone     String
+  service   String
+  message   String?
+  status    String   @default("new")
+  createdAt DateTime @default(now())
+}
+
+model Assessment {
+  id          Int      @id @default(autoincrement())
+  type        String
+  name        String
+  email       String
+  phone       String
+  country     String?
+  education   String?
+  experience  String?
+  courseLevel String?
+  destination String?
+  loanAmount  String?
+  data        String
+  status      String   @default("pending")
+  createdAt   DateTime @default(now())
+}
+
+model BlogPost {
+  id        Int      @id @default(autoincrement())
+  title     String
+  slug      String   @unique
+  excerpt   String
+  content   String
+  category  String
+  imageUrl  String?
+  published Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Testimonial {
+  id        Int      @id @default(autoincrement())
+  name      String
+  country   String
+  service   String
+  rating    Int      @default(5)
+  review    String
+  approved  Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+model Service {
+  id          Int      @id @default(autoincrement())
+  title       String
+  slug        String   @unique
+  category    String
+  description String
+  details     String?
+  imageUrl    String?
+  active      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model SiteContent {
+  id        Int      @id @default(autoincrement())
+  section   String   @unique
+  content   String
+  updatedAt DateTime @updatedAt
+}
