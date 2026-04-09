@@ -1,30 +1,36 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { Layers } from 'lucide-react'
+import AdminLogoutButton from './LogoutButton'
 
 export const metadata: Metadata = {
   title: 'Admin Panel – Beyond Borders',
 }
 
 const navItems = [
-  { label: 'Dashboard', href: '/admin', icon: null },
-  { label: 'Enquiries', href: '/admin/enquiries', icon: null },
-  { label: 'Assessments', href: '/admin/assessments', icon: null },
-  { label: 'Blog', href: '/admin/blog', icon: null },
+  { label: 'Dashboard',   href: '/admin' },
+  { label: 'Enquiries',   href: '/admin/enquiries' },
+  { label: 'Assessments', href: '/admin/assessments' },
+  { label: 'Blog',        href: '/admin/blog' },
 ]
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col">
-      {/* Admin Topbar */}
+      {/* Topbar */}
       <header className="bg-blue-900 text-white px-6 py-4 flex items-center justify-between shadow">
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 rounded bg-white flex items-center justify-center">
-            <span className="text-blue-900 font-black text-sm">IP</span>
+            <span className="text-blue-900 font-black text-sm">BB</span>
           </div>
           <span className="font-bold text-lg">Beyond Borders Admin</span>
         </div>
-        <Link href="/" className="text-blue-200 hover:text-white text-sm transition-colors">← View Site</Link>
+        <div className="flex items-center gap-4">
+          <Link href="/" className="text-blue-200 hover:text-white text-sm transition-colors">
+            ← View Site
+          </Link>
+          <AdminLogoutButton />
+        </div>
       </header>
 
       <div className="flex flex-1">
@@ -50,7 +56,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           </nav>
         </aside>
 
-        {/* Main content */}
+        {/* Main */}
         <main className="flex-1 p-8 overflow-auto">
           {children}
         </main>
