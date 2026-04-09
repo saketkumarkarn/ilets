@@ -313,6 +313,9 @@ const faqs = [
 function HeroSection() {
   const [wordIndex, setWordIndex] = useState(0);
   const [visible, setVisible] = useState(true);
+  const [qaName, setQaName] = useState('');
+  const [qaService, setQaService] = useState('');
+  const [qaStatus, setQaStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -324,6 +327,23 @@ function HeroSection() {
     }, 2000);
     return () => clearInterval(interval);
   }, []);
+
+  async function handleQuickAssessment(e: React.FormEvent) {
+    e.preventDefault();
+    if (!qaName.trim() || !qaService) return;
+    setQaStatus('loading');
+    try {
+      const res = await fetch('/api/enquiry', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: qaName, email: 'quick@assessment.form', phone: 'N/A', service: qaService, message: 'Quick assessment request from homepage' }),
+      });
+      const data = await res.json();
+      setQaStatus(data.success ? 'success' : 'error');
+    } catch {
+      setQaStatus('error');
+    }
+  }
 
   return (
     <section
@@ -450,27 +470,49 @@ function HeroSection() {
               <h3 className="text-white font-bold text-lg mb-1">Quick Assessment</h3>
               <p className="text-white/70 text-sm mb-5">Get your eligibility checked free in 24 hrs</p>
 
-              <div className="space-y-3">
-                <input
-                  type="text"
-                  placeholder="Your Full Name"
-                  className="w-full rounded-xl bg-white/20 border border-white/30 text-white placeholder-white/60 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-white/50"
-                />
-                <select className="w-full rounded-xl bg-white/20 border border-white/30 text-white px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-white/50">
-                  <option value="" className="text-slate-900">Select Service</option>
-                  <option value="pr" className="text-slate-900">Permanent Residency</option>
-                  <option value="study" className="text-slate-900">Study Abroad</option>
-                  <option value="work" className="text-slate-900">Work Visa</option>
-                  <option value="loan" className="text-slate-900">Loan Assistance</option>
-                </select>
-                <button
-                  type="button"
-                  className="w-full rounded-xl py-3 font-bold text-sm transition-all duration-200 hover:scale-105"
-                  style={{ background: 'linear-gradient(90deg, #f97316, #e8321a)', color: '#fff' }}
-                >
-                  Get Free Assessment →
-                </button>
-              </div>
+              {qaStatus === 'success' ? (
+                <div className="py-6 text-center">
+                  <div className="w-14 h-14 rounded-full bg-green-400/20 flex items-center justify-center mx-auto mb-3">
+                    <CheckCircle className="w-7 h-7 text-green-300" />
+                  </div>
+                  <p className="text-white font-bold text-base mb-1">Request Received!</p>
+                  <p className="text-white/70 text-sm">We'll contact you within 24 hours.</p>
+                </div>
+              ) : (
+                <form onSubmit={handleQuickAssessment} className="space-y-3">
+                  <input
+                    type="text"
+                    placeholder="Your Full Name"
+                    value={qaName}
+                    onChange={(e) => setQaName(e.target.value)}
+                    required
+                    className="w-full rounded-xl bg-white/20 border border-white/30 text-white placeholder-white/60 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-white/50"
+                  />
+                  <select
+                    value={qaService}
+                    onChange={(e) => setQaService(e.target.value)}
+                    required
+                    className="w-full rounded-xl bg-white/20 border border-white/30 text-white px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-white/50"
+                  >
+                    <option value="" className="text-slate-900">Select Service</option>
+                    <option value="Permanent Residency" className="text-slate-900">Permanent Residency</option>
+                    <option value="Study Abroad" className="text-slate-900">Study Abroad</option>
+                    <option value="Work Visa" className="text-slate-900">Work Visa</option>
+                    <option value="Loan Assistance" className="text-slate-900">Loan Assistance</option>
+                  </select>
+                  {qaStatus === 'error' && (
+                    <p className="text-red-300 text-xs">Something went wrong. Please try again.</p>
+                  )}
+                  <button
+                    type="submit"
+                    disabled={qaStatus === 'loading'}
+                    className="w-full rounded-xl py-3 font-bold text-sm transition-all duration-200 hover:scale-105 disabled:opacity-60"
+                    style={{ background: 'linear-gradient(90deg, #f97316, #e8321a)', color: '#fff' }}
+                  >
+                    {qaStatus === 'loading' ? 'Submitting…' : 'Get Free Assessment →'}
+                  </button>
+                </form>
+              )}
 
               <div className="mt-4 flex items-center justify-center gap-1 text-white/70 text-xs">
                 <Shield className="w-3.5 h-3.5" />
