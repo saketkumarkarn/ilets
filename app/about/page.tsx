@@ -1,5 +1,8 @@
+import { getContent, DEFAULT_CONTENT } from '@/lib/content'
 import Link from 'next/link';
 import Image from 'next/image';
+
+export const dynamic = 'force-dynamic'
 import {
   MapPin,
   Calendar,
@@ -164,7 +167,24 @@ const certifications = [
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const [cmsAbout, cmsTeam] = await Promise.all([
+    getContent('about', DEFAULT_CONTENT.about),
+    getContent('team', DEFAULT_CONTENT.team),
+  ])
+
+  // Merge CMS team with fallback bg gradients from hardcoded team array
+  const bgGradients = [
+    'from-[#1a3faa] to-[#122d80]',
+    'from-[#e8321a] to-[#f97316]',
+    'from-emerald-600 to-teal-500',
+    'from-violet-600 to-purple-500',
+  ]
+  const teamData = cmsTeam.map((m, i) => ({
+    ...m,
+    bg: bgGradients[i % bgGradients.length],
+  }))
+
   return (
     <>
       {/* ── Hero ── */}
@@ -240,13 +260,13 @@ export default function AboutPage() {
                 <span className="text-brand-gradient">Dreams Into Reality</span>
               </h2>
               <p className="text-slate-600 leading-relaxed mb-5 text-lg">
-                Founded in 2014 and headquartered in New Delhi, Beyond Borders has grown from a single-room consultancy into one of India&apos;s leading immigration and study-abroad firms — with offices in Mumbai, Bengaluru, and Hyderabad.
+                {cmsAbout.story}
               </p>
               <p className="text-slate-600 leading-relaxed mb-5">
-                We serve clients across the country — and the globe — with a dedicated team of ICCRC and MARA certified advisors who bring genuine expertise and unwavering commitment to every case.
+                {cmsAbout.story2}
               </p>
               <p className="text-slate-600 leading-relaxed mb-8">
-                Whether you&apos;re a student eyeing a world-class university, a skilled professional seeking permanent residency, or a family looking to reunite abroad — Beyond Borders has a proven pathway for you.
+                {cmsAbout.story3}
               </p>
               <Link
                 href="#team"
@@ -398,7 +418,7 @@ export default function AboutPage() {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            {team.map(({ name, role, initials, bio, bg }) => (
+            {teamData.map(({ name, role, initials, bio, bg }) => (
               <div
                 key={name}
                 className="card-hover flex flex-col items-center text-center rounded-3xl border border-slate-100 p-8 shadow-sm bg-white group"

@@ -169,6 +169,8 @@ const requirements = [
 
 import { getContent } from '@/lib/content'
 
+export const dynamic = 'force-dynamic'
+
 export default async function ImmigrationServicesPage() {
   type CmsVisaCard = { title?: string; description?: string; eligibilityPoints?: string[]; countries?: string[]; processingTime?: string; ctaLabel?: string }
   type CmsRequirement = { title?: string; items?: string[] }

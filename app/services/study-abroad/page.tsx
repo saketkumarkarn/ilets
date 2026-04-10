@@ -185,6 +185,8 @@ const requirements: Requirement[] = [
 
 import { getContent } from '@/lib/content'
 
+export const dynamic = 'force-dynamic'
+
 export default async function StudyAbroadPage() {
   type CmsStep = { title?: string; description?: string }
   type CmsCountry = { flag?: string; name?: string; slug?: string; intakePeriods?: string; avgTuition?: string; topField?: string; keyFact?: string }

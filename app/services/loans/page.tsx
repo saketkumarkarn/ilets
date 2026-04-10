@@ -91,6 +91,8 @@ const requiredDocuments = [
 
 import { getContent } from '@/lib/content'
 
+export const dynamic = 'force-dynamic'
+
 export default async function LoansServicesPage() {
   type CmsLoan = { type?: string; maxAmount?: string; interestRange?: string; tenure?: string; highlight?: string; features?: string[] }
   type CmsContent = { loanTypes?: CmsLoan[]; eligibilityCriteria?: string[]; requiredDocuments?: string[] }

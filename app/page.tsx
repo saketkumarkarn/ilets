@@ -1,5 +1,8 @@
 'use client';
 
+// CMS-enabled: hero, stats, and FAQ content is fetched from the DB on mount.
+// All other sections use hardcoded data (they are not in the CMS).
+
 /**
  * Beyond Borders – Home Page
  *
@@ -310,6 +313,16 @@ const faqs = [
 
 // ─── 1. HeroSection (client – uses useState + useEffect) ──────────────────────
 
+const DEFAULT_HERO = {
+  badge: "India's #1 Immigration Consultants",
+  headline: 'Your Dream of Living Abroad Starts Here',
+  subtext: 'Expert immigration & study abroad consultants with 10+ years of experience and 5,000+ success stories across 50 countries.',
+  destinations: DESTINATIONS,
+  cta1: 'Start Free Assessment',
+  cta2: 'Call Now',
+  trustItems: ['5000+ Visas', '98% Success', '10+ Years'],
+};
+
 function HeroSection() {
   const [wordIndex, setWordIndex] = useState(0);
   const [visible, setVisible] = useState(true);
@@ -318,17 +331,25 @@ function HeroSection() {
   const [qaPhone, setQaPhone] = useState('');
   const [qaService, setQaService] = useState('');
   const [qaStatus, setQaStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const [hero, setHero] = useState(DEFAULT_HERO);
+
+  useEffect(() => {
+    fetch('/api/content/hero')
+      .then(r => r.json())
+      .then(data => { if (data.content) setHero({ ...DEFAULT_HERO, ...data.content }) })
+      .catch(() => {});
+  }, []);
 
   useEffect(() => {
     const interval = setInterval(() => {
       setVisible(false);
       setTimeout(() => {
-        setWordIndex((i) => (i + 1) % DESTINATIONS.length);
+        setWordIndex((i) => (i + 1) % (hero.destinations?.length || DESTINATIONS.length));
         setVisible(true);
       }, 400);
     }, 2000);
     return () => clearInterval(interval);
-  }, []);
+  }, [hero.destinations]);
 
   async function handleQuickAssessment(e: React.FormEvent) {
     e.preventDefault();
@@ -384,7 +405,7 @@ function HeroSection() {
           {/* Badge */}
           <div className="inline-flex items-center gap-2 glass rounded-full px-5 py-2 mb-6 text-sm font-semibold">
             <span>🏆</span>
-            <span>India's #1 Immigration Consultants</span>
+            <span>{hero.badge}</span>
           </div>
 
           {/* Headline */}
@@ -400,15 +421,14 @@ function HeroSection() {
                 transform: visible ? 'translateY(0)' : 'translateY(16px)',
               }}
             >
-              {DESTINATIONS[wordIndex]}
+              {(hero.destinations ?? DESTINATIONS)[wordIndex]}
             </span>
             <br />
             <span className="text-white">Starts Here</span>
           </h1>
 
           <p className="mt-4 text-lg sm:text-xl text-blue-100 max-w-xl leading-relaxed">
-            Expert immigration &amp; study abroad consultants with 10+ years of experience and 5,000+
-            success stories across 50 countries.
+            {hero.subtext}
           </p>
 
           {/* Buttons */}
@@ -430,18 +450,12 @@ function HeroSection() {
 
           {/* Trust row */}
           <div className="mt-10 flex flex-wrap gap-6 text-sm font-semibold text-white/90">
-            <span className="flex items-center gap-2">
-              <CheckCircle className="w-5 h-5 text-orange-300" />
-              5000+ Visas
-            </span>
-            <span className="flex items-center gap-2">
-              <CheckCircle className="w-5 h-5 text-orange-300" />
-              98% Success
-            </span>
-            <span className="flex items-center gap-2">
-              <CheckCircle className="w-5 h-5 text-orange-300" />
-              10+ Years
-            </span>
+            {(hero.trustItems ?? DEFAULT_HERO.trustItems).map((item) => (
+              <span key={item} className="flex items-center gap-2">
+                <CheckCircle className="w-5 h-5 text-orange-300" />
+                {item}
+              </span>
+            ))}
           </div>
         </div>
 
@@ -554,16 +568,37 @@ function HeroSection() {
   );
 }
 
-// ─── 2. StatsSection (server-safe – no hooks) ─────────────────────────────────
+// ─── 2. StatsSection (fetches from CMS) ──────────────────────────────────────
 
-const statItems = [
+const DEFAULT_STAT_ITEMS = [
   { value: '10+', label: 'Years Experience', icon: Clock },
   { value: '5000+', label: 'Visas Approved', icon: CheckCircle },
   { value: '50+', label: 'Countries Served', icon: Globe },
   { value: '98%', label: 'Success Rate', icon: ThumbsUp },
 ];
 
+const STAT_ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
+  Clock, CheckCircle, Globe, ThumbsUp,
+};
+
 function StatsSection() {
+  const [statItems, setStatItems] = useState(DEFAULT_STAT_ITEMS);
+
+  useEffect(() => {
+    fetch('/api/content/stats')
+      .then(r => r.json())
+      .then(data => {
+        if (Array.isArray(data.content)) {
+          setStatItems(data.content.map((s: { value: string; label: string; icon?: string }, i: number) => ({
+            value: s.value ?? DEFAULT_STAT_ITEMS[i]?.value,
+            label: s.label ?? DEFAULT_STAT_ITEMS[i]?.label,
+            icon: STAT_ICON_MAP[s.icon ?? ''] ?? DEFAULT_STAT_ITEMS[i]?.icon,
+          })));
+        }
+      })
+      .catch(() => {});
+  }, []);
+
   return (
     <section className="bg-blue-gradient py-16 w-full">
       <div className="w-full px-4 sm:px-8 lg:px-16">
@@ -1052,10 +1087,26 @@ function TestimonialsSection() {
   );
 }
 
-// ─── 8. FAQSection (client – uses useState) ───────────────────────────────────
+// ─── 8. FAQSection (client – uses useState, fetches from CMS) ────────────────
 
 function FAQSection() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const [faqItems, setFaqItems] = useState(faqs);
+
+  useEffect(() => {
+    fetch('/api/content/faq')
+      .then(r => r.json())
+      .then(data => {
+        if (Array.isArray(data.content)) {
+          // CMS stores as { q, a }, component uses { question, answer }
+          setFaqItems(data.content.map((f: { q?: string; question?: string; a?: string; answer?: string }) => ({
+            question: f.question ?? f.q ?? '',
+            answer: f.answer ?? f.a ?? '',
+          })));
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   const toggle = (i: number) => setOpenIndex(openIndex === i ? null : i);
 
@@ -1080,7 +1131,7 @@ function FAQSection() {
 
         {/* Accordion */}
         <div className="space-y-3">
-          {faqs.map(({ question, answer }, i) => {
+          {faqItems.map(({ question, answer }, i) => {
             const isOpen = openIndex === i;
             return (
               <div

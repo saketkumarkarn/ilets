@@ -1,15 +1,16 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { Phone, Mail, MapPin, Clock } from 'lucide-react'
 
-const contactInfo = [
-  { icon: Phone, label: 'Phone', value: '+91-9876543210', href: 'tel:+919876543210' },
-  { icon: Mail, label: 'Email', value: 'info@immigratepro.com', href: 'mailto:info@immigratepro.com' },
-  { icon: MapPin, label: 'Address', value: '123 Immigration House, Connaught Place, New Delhi 110001', href: null },
-  { icon: Clock, label: 'Office Hours', value: 'Mon – Sat: 9:00 AM – 7:00 PM IST', href: null },
-]
+const DEFAULT_CONTACT = {
+  phone: '+91-9876543210',
+  email: 'info@beyondborders.in',
+  address: '123, Connaught Place, New Delhi, India – 110001',
+  whatsapp: '919876543210',
+  hours: 'Mon–Sat: 9:00 AM – 7:00 PM IST',
+}
 
 const services = [
   'Immigration Services',
@@ -21,6 +22,21 @@ const services = [
 export default function ContactPage() {
   const [form, setForm] = useState({ name: '', email: '', phone: '', service: '', message: '' })
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
+  const [contact, setContact] = useState(DEFAULT_CONTACT)
+
+  useEffect(() => {
+    fetch('/api/content/contact')
+      .then(r => r.json())
+      .then(data => { if (data.content) setContact({ ...DEFAULT_CONTACT, ...data.content }) })
+      .catch(() => {})
+  }, [])
+
+  const contactInfo = [
+    { icon: Phone, label: 'Phone', value: contact.phone, href: `tel:${contact.phone.replace(/\s|-/g, '')}` },
+    { icon: Mail, label: 'Email', value: contact.email, href: `mailto:${contact.email}` },
+    { icon: MapPin, label: 'Address', value: contact.address, href: null },
+    { icon: Clock, label: 'Office Hours', value: contact.hours, href: null },
+  ]
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) {
     setForm(prev => ({ ...prev, [e.target.name]: e.target.value }))
@@ -92,7 +108,7 @@ export default function ContactPage() {
 
             {/* WhatsApp */}
             <a
-              href="https://wa.me/919876543210"
+              href={`https://wa.me/${contact.whatsapp}`}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-3 bg-green-500 hover:bg-green-600 text-white font-semibold px-6 py-3 rounded-xl transition-colors"
