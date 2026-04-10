@@ -29,8 +29,8 @@ function LoginForm() {
       const data = await res.json()
 
       if (data.success) {
-        router.push(from)
-        router.refresh()
+        // Hard redirect so the new cookie is always included in the next request
+        window.location.href = from
       } else {
         setErrorMsg(data.message ?? 'Invalid credentials.')
         setStatus('error')

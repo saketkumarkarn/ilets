@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createHmac } from 'crypto'
 
+export const dynamic = 'force-dynamic'
+export const runtime = 'nodejs'
+
 const ADMIN_EMAIL    = process.env.ADMIN_EMAIL    ?? 'admin@beyondborders.in'
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD ?? 'Admin@1234'
 const AUTH_SECRET    = process.env.AUTH_SECRET    ?? 'bb-secret-change-in-production'
