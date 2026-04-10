@@ -14,10 +14,13 @@ export async function GET() {
 
 export async function PATCH(request: NextRequest) {
   try {
-    const { id, status } = await request.json()
+    const { id, status, remarks } = await request.json()
+    const data: Record<string, string> = {}
+    if (status !== undefined) data.status = status
+    if (remarks !== undefined) data.remarks = remarks
     const updated = await prisma.assessment.update({
       where: { id: Number(id) },
-      data: { status },
+      data,
     })
     return NextResponse.json({ success: true, assessment: updated })
   } catch {
