@@ -334,7 +334,7 @@ function HeroSection() {
   const [hero, setHero] = useState(DEFAULT_HERO);
 
   useEffect(() => {
-    fetch('/api/content/hero')
+    fetch('/api/content/hero', { cache: 'no-store' })
       .then(r => r.json())
       .then(data => { if (data.content) setHero({ ...DEFAULT_HERO, ...data.content }) })
       .catch(() => {});
@@ -585,7 +585,7 @@ function StatsSection() {
   const [statItems, setStatItems] = useState(DEFAULT_STAT_ITEMS);
 
   useEffect(() => {
-    fetch('/api/content/stats')
+    fetch('/api/content/stats', { cache: 'no-store' })
       .then(r => r.json())
       .then(data => {
         if (Array.isArray(data.content)) {
@@ -1094,7 +1094,7 @@ function FAQSection() {
   const [faqItems, setFaqItems] = useState(faqs);
 
   useEffect(() => {
-    fetch('/api/content/faq')
+    fetch('/api/content/faq', { cache: 'no-store' })
       .then(r => r.json())
       .then(data => {
         if (Array.isArray(data.content)) {

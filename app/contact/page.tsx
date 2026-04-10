@@ -25,7 +25,7 @@ export default function ContactPage() {
   const [contact, setContact] = useState(DEFAULT_CONTACT)
 
   useEffect(() => {
-    fetch('/api/content/contact')
+    fetch('/api/content/contact', { cache: 'no-store' })
       .then(r => r.json())
       .then(data => { if (data.content) setContact({ ...DEFAULT_CONTACT, ...data.content }) })
       .catch(() => {})

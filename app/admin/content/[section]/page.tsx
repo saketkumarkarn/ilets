@@ -1652,7 +1652,7 @@ export default function SectionEditorPage() {
       setLoading(false)
       return
     }
-    fetch(`/api/content/${section}`)
+    fetch(`/api/content/${section}`, { cache: 'no-store' })
       .then((r) => r.json())
       .then((data) => {
         if (section.startsWith('country-')) {
