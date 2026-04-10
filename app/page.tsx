@@ -336,7 +336,22 @@ function HeroSection() {
   useEffect(() => {
     fetch('/api/content/hero', { cache: 'no-store' })
       .then(r => r.json())
-      .then(data => { if (data.content) setHero({ ...DEFAULT_HERO, ...data.content }) })
+      .then(data => {
+        if (data.content) {
+          const raw = data.content;
+          // Destinations may be stored as array, newline-string, or comma-string
+          let destinations: string[] = DEFAULT_HERO.destinations;
+          if (Array.isArray(raw.destinations) && raw.destinations.length > 0) {
+            destinations = raw.destinations;
+          } else if (typeof raw.destinations === 'string' && raw.destinations.trim()) {
+            // Try comma-split first, then newline-split
+            const byCom = raw.destinations.split(',').map((s: string) => s.trim()).filter(Boolean);
+            const byNl  = raw.destinations.split('\n').map((s: string) => s.trim()).filter(Boolean);
+            destinations = byCom.length > 1 ? byCom : byNl.length > 0 ? byNl : DEFAULT_HERO.destinations;
+          }
+          setHero({ ...DEFAULT_HERO, ...raw, destinations });
+        }
+      })
       .catch(() => {});
   }, []);
 
@@ -408,25 +423,24 @@ function HeroSection() {
             <span>{hero.badge}</span>
           </div>
 
-          {/* Headline */}
+          {/* Headline with animated rotating destination */}
           <h1 className="text-4xl sm:text-5xl lg:text-7xl font-extrabold leading-tight tracking-tight mb-4">
             {hero.headline}
-          </h1>
-
-          {/* Animated destination */}
-          <div className="flex items-center gap-3 mb-2 text-xl sm:text-2xl font-bold text-white/80">
-            <span>🌍 Destinations:</span>
+            <br />
+            <span className="text-white text-3xl sm:text-4xl lg:text-5xl font-semibold">
+              Living in{' '}
+            </span>
             <span
-              className="inline-block transition-all duration-300"
+              className="inline-block transition-all duration-300 text-3xl sm:text-4xl lg:text-5xl"
               style={{
                 color: '#f97316',
                 opacity: visible ? 1 : 0,
-                transform: visible ? 'translateY(0)' : 'translateY(12px)',
+                transform: visible ? 'translateY(0)' : 'translateY(16px)',
               }}
             >
               {(hero.destinations ?? DESTINATIONS)[wordIndex]}
             </span>
-          </div>
+          </h1>
 
           <p className="mt-4 text-lg sm:text-xl text-blue-100 max-w-xl leading-relaxed">
             {hero.subtext}
