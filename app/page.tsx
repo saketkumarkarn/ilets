@@ -410,22 +410,23 @@ function HeroSection() {
 
           {/* Headline */}
           <h1 className="text-4xl sm:text-5xl lg:text-7xl font-extrabold leading-tight tracking-tight mb-4">
-            Your Dream of
-            <br />
-            <span className="text-white">Living in</span>{' '}
+            {hero.headline}
+          </h1>
+
+          {/* Animated destination */}
+          <div className="flex items-center gap-3 mb-2 text-xl sm:text-2xl font-bold text-white/80">
+            <span>🌍 Destinations:</span>
             <span
               className="inline-block transition-all duration-300"
               style={{
                 color: '#f97316',
                 opacity: visible ? 1 : 0,
-                transform: visible ? 'translateY(0)' : 'translateY(16px)',
+                transform: visible ? 'translateY(0)' : 'translateY(12px)',
               }}
             >
               {(hero.destinations ?? DESTINATIONS)[wordIndex]}
             </span>
-            <br />
-            <span className="text-white">Starts Here</span>
-          </h1>
+          </div>
 
           <p className="mt-4 text-lg sm:text-xl text-blue-100 max-w-xl leading-relaxed">
             {hero.subtext}
@@ -437,14 +438,14 @@ function HeroSection() {
               href="/assessment"
               className="inline-flex items-center justify-center gap-2 rounded-full bg-white px-8 py-4 text-base font-bold text-[#1a3faa] shadow-2xl hover:bg-orange-50 hover:scale-105 transition-all duration-200"
             >
-              Start Free Assessment
+              {hero.cta1 ?? 'Start Free Assessment'}
             </Link>
             <a
               href="tel:+919999999999"
               className="inline-flex items-center justify-center gap-2 rounded-full border-2 border-white px-8 py-4 text-base font-bold text-white hover:bg-white/10 transition-all duration-200"
             >
               <Phone className="w-5 h-5" />
-              Call Now
+              {hero.cta2 ?? 'Call Now'}
             </a>
           </div>
 
