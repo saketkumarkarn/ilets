@@ -22,15 +22,8 @@ export default function OgImage() {
           position: 'relative',
         }}
       >
-        {/* Logo badge */}
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '16px',
-            marginBottom: '40px',
-          }}
-        >
+        {/* Logo + name row */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '40px' }}>
           <div
             style={{
               width: '72px',
@@ -47,29 +40,32 @@ export default function OgImage() {
           >
             BB
           </div>
-          <span style={{ color: 'white', fontSize: '28px', fontWeight: 700, letterSpacing: '-0.5px' }}>
+          <div style={{ display: 'flex', color: 'white', fontSize: '28px', fontWeight: 700 }}>
             BEYOND BORDERS
-          </span>
+          </div>
         </div>
 
         {/* Headline */}
         <div
           style={{
+            display: 'flex',
+            flexWrap: 'wrap',
             color: 'white',
-            fontSize: '64px',
+            fontSize: '62px',
             fontWeight: 900,
             lineHeight: 1.1,
             marginBottom: '24px',
             maxWidth: '900px',
           }}
         >
-          Your Dream of Living Abroad{' '}
+          Your Dream of Living Abroad&nbsp;
           <span style={{ color: '#f97316' }}>Starts Here</span>
         </div>
 
         {/* Subtext */}
         <div
           style={{
+            display: 'flex',
             color: 'rgba(255,255,255,0.85)',
             fontSize: '26px',
             fontWeight: 400,
@@ -81,12 +77,13 @@ export default function OgImage() {
           India's trusted immigration & study abroad consultancy. 5000+ visas approved.
         </div>
 
-        {/* Trust badges */}
-        <div style={{ display: 'flex', gap: '24px' }}>
+        {/* Trust badges row */}
+        <div style={{ display: 'flex', gap: '20px' }}>
           {['✅ 5000+ Visas', '✅ 98% Success Rate', '✅ Free Assessment'].map((item) => (
             <div
               key={item}
               style={{
+                display: 'flex',
                 background: 'rgba(255,255,255,0.2)',
                 borderRadius: '50px',
                 padding: '12px 24px',
@@ -100,9 +97,10 @@ export default function OgImage() {
           ))}
         </div>
 
-        {/* Domain watermark */}
+        {/* Domain */}
         <div
           style={{
+            display: 'flex',
             position: 'absolute',
             bottom: '40px',
             right: '80px',
