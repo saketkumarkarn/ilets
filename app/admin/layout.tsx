@@ -5,6 +5,7 @@ import AdminLogoutButton from './LogoutButton'
 
 export const metadata: Metadata = {
   title: 'Admin Panel – Beyond Borders',
+  robots: { index: false, follow: false },
 }
 
 const navItems = [

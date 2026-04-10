@@ -184,8 +184,21 @@ const requirements: Requirement[] = [
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 import { getContent } from '@/lib/content'
+import type { Metadata } from 'next'
 
 export const dynamic = 'force-dynamic'
+
+export const metadata: Metadata = {
+  title: 'Study Abroad – University Admissions & Student Visa Guidance',
+  description: 'Study abroad consultants helping you apply to top universities in Canada, Australia, UK, New Zealand & USA. Student visa, SOP writing, scholarship guidance. Free counselling.',
+  keywords: ['study abroad consultants india', 'student visa consultants', 'university admissions india', 'canada student visa', 'australia student visa', 'uk student visa'],
+  alternates: { canonical: 'https://beyondbordersimmigration.in/services/study-abroad' },
+  openGraph: {
+    title: 'Study Abroad Services | Beyond Borders',
+    description: 'Expert study abroad guidance. University admissions, student visas & scholarships.',
+    url: 'https://beyondbordersimmigration.in/services/study-abroad',
+  },
+}
 
 export default async function StudyAbroadPage() {
   type CmsStep = { title?: string; description?: string }

@@ -1,4 +1,16 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
+
+export const metadata: Metadata = {
+  title: 'Education Loan Assistance – Overseas Study Loans',
+  description: 'Beyond Borders helps you secure education loans up to ₹75 lakhs for studying abroad with or without collateral. Fast approvals, 15+ banking partners.',
+  alternates: { canonical: 'https://beyondbordersimmigration.in/loan-assistance' },
+  openGraph: {
+    title: 'Loan Assistance | Beyond Borders',
+    description: 'Education loans up to ₹75 lakhs for studying abroad. Collateral-free options available.',
+    url: 'https://beyondbordersimmigration.in/loan-assistance',
+  },
+};
 import {
   CheckCircle,
   ArrowRight,

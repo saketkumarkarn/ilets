@@ -90,8 +90,21 @@ const requiredDocuments = [
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 import { getContent } from '@/lib/content'
+import type { Metadata } from 'next'
 
 export const dynamic = 'force-dynamic'
+
+export const metadata: Metadata = {
+  title: 'Education Loan Assistance – Study Abroad Loans Without Collateral',
+  description: 'Get education loans up to ₹75 lakhs for studying abroad. Collateral-free loans for top universities. Fast approval, 15+ bank partners. Free loan eligibility check.',
+  keywords: ['education loan abroad', 'study abroad loan india', 'collateral free education loan', 'overseas education loan', 'student loan without collateral'],
+  alternates: { canonical: 'https://beyondbordersimmigration.in/services/loans' },
+  openGraph: {
+    title: 'Education Loan Assistance | Beyond Borders',
+    description: 'Collateral-free education loans up to ₹75 lakhs for studying abroad. 15+ lending partners.',
+    url: 'https://beyondbordersimmigration.in/services/loans',
+  },
+}
 
 export default async function LoansServicesPage() {
   type CmsLoan = { type?: string; maxAmount?: string; interestRange?: string; tenure?: string; highlight?: string; features?: string[] }

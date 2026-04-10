@@ -1,4 +1,16 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
+
+export const metadata: Metadata = {
+  title: 'Our Services – Immigration, Study Abroad & Education Loans',
+  description: 'Explore Beyond Borders\' services: immigration consulting for Canada, Australia & UK; study abroad guidance; and education loan assistance up to ₹75 lakhs.',
+  alternates: { canonical: 'https://beyondbordersimmigration.in/services' },
+  openGraph: {
+    title: 'Services | Beyond Borders',
+    description: 'Immigration consulting, study abroad & education loans. Expert guidance for your global journey.',
+    url: 'https://beyondbordersimmigration.in/services',
+  },
+};
 import {
   Plane,
   GraduationCap,

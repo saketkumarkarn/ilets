@@ -1,7 +1,21 @@
 import { prisma } from '@/lib/db'
 import BlogClient, { UnifiedPost } from './BlogClient'
+import type { Metadata } from 'next'
 
 export const dynamic = 'force-dynamic'
+
+export const metadata: Metadata = {
+  title: 'Blog – Immigration News, Study Abroad Tips & Visa Guides',
+  description: 'Stay updated with the latest immigration news, Canada PR tips, Australia visa guides, study abroad advice, IELTS resources, and education loan information from Beyond Borders experts.',
+  keywords: ['immigration blog india', 'canada PR guide', 'australia immigration tips', 'study abroad blog', 'student visa tips', 'IELTS guide'],
+  alternates: { canonical: 'https://beyondbordersimmigration.in/blog' },
+  openGraph: {
+    title: 'Blog & Resources | Beyond Borders',
+    description: 'Expert immigration news, visa guides, study abroad tips and financial advice.',
+    url: 'https://beyondbordersimmigration.in/blog',
+    type: 'website',
+  },
+}
 
 // ─── Static fallback posts ─────────────────────────────────────────────────────
 

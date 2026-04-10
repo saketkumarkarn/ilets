@@ -2,8 +2,54 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { Calendar, Clock, Tag, ArrowLeft, ArrowRight, BookOpen, HelpCircle } from 'lucide-react'
 import { prisma } from '@/lib/db'
+import type { Metadata } from 'next'
 
 export const dynamic = 'force-dynamic'
+
+// ─── Dynamic Metadata per post ────────────────────────────────────────────────
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params
+  const BASE = 'https://beyondbordersimmigration.in'
+
+  // Try DB first
+  try {
+    const post = await prisma.blogPost.findUnique({ where: { slug, published: true } })
+    if (post) {
+      return {
+        title: post.title,
+        description: post.excerpt,
+        alternates: { canonical: `${BASE}/blog/${slug}` },
+        openGraph: {
+          title: post.title,
+          description: post.excerpt,
+          url: `${BASE}/blog/${slug}`,
+          type: 'article',
+          publishedTime: post.createdAt.toISOString(),
+          modifiedTime: post.updatedAt.toISOString(),
+        },
+      }
+    }
+  } catch { /* fall through */ }
+
+  // Fall back to static
+  const staticPost = staticBlogPosts.find(p => p.slug === slug)
+  if (staticPost) {
+    return {
+      title: staticPost.title,
+      description: staticPost.excerpt,
+      alternates: { canonical: `${BASE}/blog/${slug}` },
+      openGraph: {
+        title: staticPost.title,
+        description: staticPost.excerpt,
+        url: `${BASE}/blog/${slug}`,
+        type: 'article',
+      },
+    }
+  }
+
+  return { title: 'Blog | Beyond Borders' }
+}
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 

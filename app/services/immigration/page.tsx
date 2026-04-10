@@ -168,8 +168,21 @@ const requirements = [
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 import { getContent } from '@/lib/content'
+import type { Metadata } from 'next'
 
 export const dynamic = 'force-dynamic'
+
+export const metadata: Metadata = {
+  title: 'Immigration Services – Canada PR, Australia, UK & More',
+  description: 'Expert immigration consulting for Canada PR (Express Entry, PNP), Australia skilled migration, UK Skilled Worker visa, New Zealand, USA & Europe. Free eligibility check.',
+  keywords: ['immigration services india', 'canada PR consultants', 'australia immigration', 'uk visa consultants', 'express entry', 'skilled worker visa'],
+  alternates: { canonical: 'https://beyondbordersimmigration.in/services/immigration' },
+  openGraph: {
+    title: 'Immigration Services | Beyond Borders',
+    description: 'Expert immigration consulting for Canada, Australia, UK & more. Free eligibility assessment.',
+    url: 'https://beyondbordersimmigration.in/services/immigration',
+  },
+}
 
 export default async function ImmigrationServicesPage() {
   type CmsVisaCard = { title?: string; description?: string; eligibilityPoints?: string[]; countries?: string[]; processingTime?: string; ctaLabel?: string }
