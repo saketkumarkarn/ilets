@@ -423,23 +423,9 @@ function HeroSection() {
             <span>{hero.badge}</span>
           </div>
 
-          {/* Headline with animated rotating destination */}
+          {/* Headline */}
           <h1 className="text-4xl sm:text-5xl lg:text-7xl font-extrabold leading-tight tracking-tight mb-4">
             {hero.headline}
-            <br />
-            <span className="text-white text-3xl sm:text-4xl lg:text-5xl font-semibold">
-              Living in{' '}
-            </span>
-            <span
-              className="inline-block transition-all duration-300 text-3xl sm:text-4xl lg:text-5xl"
-              style={{
-                color: '#f97316',
-                opacity: visible ? 1 : 0,
-                transform: visible ? 'translateY(0)' : 'translateY(16px)',
-              }}
-            >
-              {(hero.destinations ?? DESTINATIONS)[wordIndex]}
-            </span>
           </h1>
 
           <p className="mt-4 text-lg sm:text-xl text-blue-100 max-w-xl leading-relaxed">
