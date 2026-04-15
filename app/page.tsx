@@ -315,7 +315,7 @@ const faqs = [
 
 const DEFAULT_HERO = {
   badge: "India's #1 Immigration Consultants",
-  headline: 'Your Dream of Living Abroad Starts Here',
+  headline: 'Your Dream of Studying Abroad Starts Here',
   subtext: 'Expert immigration & study abroad consultants with 10+ years of experience and 5,000+ success stories across 50 countries.',
   destinations: DESTINATIONS,
   cta1: 'Start Free Assessment',
